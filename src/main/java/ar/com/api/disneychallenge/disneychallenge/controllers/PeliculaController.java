@@ -1,7 +1,6 @@
 package ar.com.api.disneychallenge.disneychallenge.controllers;
 
 import java.util.*;
-import javax.websocket.server.PathParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -94,14 +93,14 @@ public class PeliculaController {
     public ResponseEntity<List<String>> obtenerTitulos() {
         return ResponseEntity.ok(service.obtenerTitulos());
     }
-
-    // ?genre=idGenero")
+  
     @GetMapping("/movies/genre/{generoId}")
     public ResponseEntity<List<Pelicula>> mByGeneroId(@PathVariable Integer generoId) {
+        
         return ResponseEntity.ok(service.mByGeneroId(generoId));
     }
 
-    // ?order=ASC | DESC
+  
     @GetMapping("/movies/order/desc")
     public ResponseEntity<List<Pelicula>> moviesByOrder() {
 
@@ -132,5 +131,20 @@ public class PeliculaController {
 
         }
     }
+
+
+    @GetMapping("/api/movies")
+    @ResponseBody
+    public String getTitulo(@RequestParam String titulo){
+        return "name: " + service.findByTitulo(titulo);
+    }
+
+   /* @GetMapping("/api/movies")
+    @ResponseBody
+    public String getIdGenero(@RequestParam String genre){
+        return "genre: " + genre;
+    }*/
+
+
 
 }

@@ -13,6 +13,8 @@ public interface PeliculaRepository extends JpaRepository<Pelicula, Integer>{
 
     Pelicula findByGenero(Genero genero);
 
+    //String findByTitulo(String titulo);
+
   //  List<Pelicula> findByOrderByDateAsc();
     
 }
