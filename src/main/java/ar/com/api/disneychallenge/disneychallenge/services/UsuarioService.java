@@ -1,8 +1,6 @@
 package ar.com.api.disneychallenge.disneychallenge.services;
 
-import java.math.BigDecimal;
 import java.util.*;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.GrantedAuthority;
@@ -17,16 +15,19 @@ import ar.com.api.disneychallenge.disneychallenge.entities.Pais.TipoDocuEnum;
 import ar.com.api.disneychallenge.disneychallenge.entities.Usuario.TipoUsuarioEnum;
 import ar.com.api.disneychallenge.disneychallenge.repos.UsuarioRepository;
 import ar.com.api.disneychallenge.disneychallenge.security.Crypto;
+import ar.com.api.disneychallenge.disneychallenge.sistema.comm.EmailService;
 
 @Service
 public class UsuarioService {
 
- @Autowired 
- StaffService staffService;
- @Autowired
- UsuarioRepository usuarioRepository;
- @Autowired
- VisitanteService visitanteService;
+  @Autowired
+  StaffService staffService;
+  @Autowired
+  UsuarioRepository usuarioRepository;
+  @Autowired
+  VisitanteService visitanteService;
+  @Autowired
+  EmailService emailService;
 
   public Usuario buscarPorUsername(String username) {
     return usuarioRepository.findByUsername(username);
@@ -48,13 +49,8 @@ public class UsuarioService {
     return u;
   }
 
-  public Usuario crearUsuario(TipoUsuarioEnum userType, String fullName, int country, int identificationType,
-  String identification, String email, String password) {
-return null;
-}
-
-  public Usuario crearUsuario(TipoUsuarioEnum tipoUsuario, String nombre, int pais, Date fechaNacimiento,
-      TipoDocuEnum tipoDocumento, String documento, String email, String password){
+  public Usuario crearUsuario(TipoUsuarioEnum tipoUsuario, String nombre, Integer pais, Date fechaNacimiento,
+      TipoDocuEnum tipoDocumento, String documento, String email, String password) {
 
     Usuario usuario = new Usuario();
     usuario.setUsername(email);
@@ -74,7 +70,7 @@ return null;
 
       visitanteService.crearVisitante(visitante);
 
-    } else { // en este caso, asumios que si no es pasajero es staff
+    } else { // en este caso, asumimos que si no es visitante es staff
       Staff staff = new Staff();
       staff.setDocumento(documento);
       staff.setPaisId(PaisEnum.parse(pais));
@@ -84,9 +80,8 @@ return null;
       staff.setUsuario(usuario);
 
       staffService.crearStaff(staff);
-
-
     }
+    emailService.SendEmail(usuario.getEmail(), "¡Registración Exitosa!", "Bienvenido, ud. ha sido registrado");
 
     return usuario;
   }
@@ -139,6 +134,4 @@ return null;
     return authorities;
   }
 
-
-
-}  
+}

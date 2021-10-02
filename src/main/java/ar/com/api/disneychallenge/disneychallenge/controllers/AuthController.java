@@ -17,18 +17,13 @@ import ar.com.api.disneychallenge.disneychallenge.security.jwt.JWTTokenUtil;
 import ar.com.api.disneychallenge.disneychallenge.services.JWTUserDetailsService;
 import ar.com.api.disneychallenge.disneychallenge.services.UsuarioService;
 
-/**
- * AuthController
- */
+
 @RestController
 public class AuthController {
 
     @Autowired
     UsuarioService usuarioService;
 
-    /*
-     * @Autowired private AuthenticationManager authenticationManager;
-     */
     @Autowired
     private JWTTokenUtil jwtTokenUtil;
 
@@ -43,7 +38,7 @@ public class AuthController {
 
         // aca creamos la persona y el usuario a traves del service.
 
-        Usuario usuario = usuarioService.crearUsuario(req.userType, req.fullName, req.country, req.identificationType,
+        Usuario usuario = usuarioService.crearUsuario(req.userType, req.fullName, req.country, req.birthDate, req.identificationType,
                 req.identification,  req.email, req.password);
 
         r.isOk = true;
