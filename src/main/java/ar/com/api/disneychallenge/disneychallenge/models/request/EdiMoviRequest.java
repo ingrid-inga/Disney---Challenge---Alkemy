@@ -10,7 +10,7 @@ public class EdiMoviRequest {
     public Date fechaDeCreacion;
     public Integer calificacion;
     public Set<Personaje> personajes;
-    public Genero genero;
+    public Integer generoId;
 
     
 }

@@ -21,10 +21,10 @@ public class PeliculaService {
     @Autowired
     private PersonajeService service;
 
-	public boolean crearPelicula(Pelicula pelicula) {
-        if(existe(pelicula.getTitulo()))
+	public boolean crearPelicula(Pelicula p) {
+        if(existe(p.getTitulo()))
         return false;
-        repository.save(pelicula);
+        repository.save(p);
         return true;
 	}
 
@@ -70,21 +70,26 @@ public class PeliculaService {
     }
 
     public List<String> obtenerTitulos() {
-
         return this.traerPeliculas().stream().map(cat ->cat.getTitulo()).collect(Collectors.toList());
     }
 
 	public List<Pelicula> moviesByOrder() {
-		//return this.traerPeliculas().stream().map(mor ->mor.getFechaDeCreacion()).collections.sort(Collectors.toList()); //findByOrderByDateAsc());
 	return this.traerPeliculas().stream().sorted(Comparator.comparing(Pelicula::getFechaDeCreacion).reversed()).collect(Collectors.toList());
     }
 
     public List<Pelicula> moviesByOrderasc() {
-		//return this.traerPeliculas().stream().map(mor ->mor.getFechaDeCreacion()).collections.sort(Collectors.toList()); //findByOrderByDateAsc());
 	return this.traerPeliculas().stream().sorted(Comparator.comparing(Pelicula::getFechaDeCreacion)).collect(Collectors.toList());
     }
 
-	public Pelicula findByTitulo(String titulo) {
-		return repository.findByTitulo(titulo);
-	}
+	/*public List<Pelicula> findByName(String name) {
+        return repository.findByTitulo(titulo);
+	}*/
+
+   /* public Pelicula findByName(String name){
+		//List<Pelicula> lista = repository.findAll();
+		
+		return repository.findByName(name);
+        //lista.stream().filter((p)->p.getTitulo().equals(name)).collect(Collectors.toList());
+		
+	} */
 }

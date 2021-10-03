@@ -3,12 +3,14 @@ package ar.com.api.disneychallenge.disneychallenge.controllers;
 import java.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ar.com.api.disneychallenge.disneychallenge.entities.Genero;
 import ar.com.api.disneychallenge.disneychallenge.entities.Pelicula;
 import ar.com.api.disneychallenge.disneychallenge.models.request.EdiMoviRequest;
 import ar.com.api.disneychallenge.disneychallenge.models.response.GenericResponse;
 import ar.com.api.disneychallenge.disneychallenge.models.response.MovieResponse;
+import ar.com.api.disneychallenge.disneychallenge.services.GeneroService;
 import ar.com.api.disneychallenge.disneychallenge.services.PeliculaService;
 
 @RestController
@@ -17,12 +19,26 @@ public class PeliculaController {
     @Autowired
     PeliculaService service;
 
+    @Autowired
+    GeneroService generoService;
+
     @PostMapping("/api/movies")
-    public ResponseEntity<?> crearPelicula(@RequestBody Pelicula pelicula) {
+    public ResponseEntity<?> crearPelicula(@RequestBody EdiMoviRequest mR) {   
         GenericResponse r = new GenericResponse();
 
-        if (service.crearPelicula(pelicula)) {
-            r.id = pelicula.getPeliculaId();
+        Pelicula p = new Pelicula();
+        p.setImagenpeli(mR.imagenpeli);
+        p.setTitulo(mR.titulo);
+        p.setFechaDeCreacion(mR.fechaDeCreacion);
+        p.setCalificacion(mR.calificacion);
+        p.setPersonajes(mR.personajes);
+        
+        Genero genero = generoService.traerById(mR.generoId);
+        genero.agregarPelicula(p);
+
+
+        if (service.crearPelicula(p)) {
+            r.id = p.getPeliculaId();
             r.isOk = true;
             r.message = "Película creada con éxito";
             return ResponseEntity.ok(r);
@@ -51,17 +67,19 @@ public class PeliculaController {
             p.setFechaDeCreacion(mR.fechaDeCreacion);
             p.setCalificacion(mR.calificacion);
             p.setPersonajes(mR.personajes);
-            p.setGenero(mR.genero);
+            
+            Genero genero = generoService.traerById(mR.generoId);
+            genero.agregarPelicula(p);
 
             service.editarById(p);
 
             r.isOk = true;
-            r.message = "Edición del personaje realizada con éxito";
+            r.message = "Edición de la película realizada con éxito";
             return ResponseEntity.ok(r);
         }
     }
 
-    @GetMapping("/movies")
+    @GetMapping("/api/movies")
     public ResponseEntity<List<MovieResponse>> traerPeliculas() {
 
         List<Pelicula> p = service.traerPeliculas();
@@ -89,7 +107,7 @@ public class PeliculaController {
         return ResponseEntity.ok(service.traerById(id));
     }
 
-    @GetMapping("/movies/nombres")
+    @GetMapping("/api/movies/nombres")
     public ResponseEntity<List<String>> obtenerTitulos() {
         return ResponseEntity.ok(service.obtenerTitulos());
     }
@@ -133,10 +151,9 @@ public class PeliculaController {
     }
 
 
-    @GetMapping("/api/movies")
-    @ResponseBody
-    public String getTitulo(@RequestParam String titulo){
-        return "name: " + service.findByTitulo(titulo);
+  /*  @GetMapping("/movies/name")
+    public ResponseEntity<?>findByName(@RequestParam String name){
+        return new ResponseEntity<>(service.findByName(name), HttpStatus.OK);
     }
 
    /* @GetMapping("/api/movies")
