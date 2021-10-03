@@ -23,7 +23,7 @@ public class PeliculaController {
     GeneroService generoService;
 
     @PostMapping("/api/movies")
-    public ResponseEntity<?> crearPelicula(@RequestBody EdiMoviRequest mR) {   
+    public ResponseEntity<?> crearPelicula(@RequestBody EdiMoviRequest mR) {
         GenericResponse r = new GenericResponse();
 
         Pelicula p = new Pelicula();
@@ -32,10 +32,9 @@ public class PeliculaController {
         p.setFechaDeCreacion(mR.fechaDeCreacion);
         p.setCalificacion(mR.calificacion);
         p.setPersonajes(mR.personajes);
-        
+
         Genero genero = generoService.traerById(mR.generoId);
         genero.agregarPelicula(p);
-
 
         if (service.crearPelicula(p)) {
             r.id = p.getPeliculaId();
@@ -67,7 +66,7 @@ public class PeliculaController {
             p.setFechaDeCreacion(mR.fechaDeCreacion);
             p.setCalificacion(mR.calificacion);
             p.setPersonajes(mR.personajes);
-            
+
             Genero genero = generoService.traerById(mR.generoId);
             genero.agregarPelicula(p);
 
@@ -111,14 +110,13 @@ public class PeliculaController {
     public ResponseEntity<List<String>> obtenerTitulos() {
         return ResponseEntity.ok(service.obtenerTitulos());
     }
-  
+
     @GetMapping("/movies/genre/{generoId}")
     public ResponseEntity<List<Pelicula>> mByGeneroId(@PathVariable Integer generoId) {
-        
+
         return ResponseEntity.ok(service.mByGeneroId(generoId));
     }
 
-  
     @GetMapping("/movies/order/desc")
     public ResponseEntity<List<Pelicula>> moviesByOrder() {
 
@@ -150,18 +148,24 @@ public class PeliculaController {
         }
     }
 
+    @GetMapping("/api/movies/{titulo}")
+    public ResponseEntity<?> findByTitulo(@PathVariable String titulo) {
+        GenericResponse r = new GenericResponse();
 
-  /*  @GetMapping("/movies/name")
-    public ResponseEntity<?>findByName(@RequestParam String name){
-        return new ResponseEntity<>(service.findByName(name), HttpStatus.OK);
+        if (service.findByTitulo(titulo) == null) {
+            r.isOk = false;
+            r.message = "El titulo ingresado no existe";
+            return ResponseEntity.badRequest().body(r);
+        }
+        return ResponseEntity.ok(service.findByTitulo(titulo));
     }
-
-   /* @GetMapping("/api/movies")
-    @ResponseBody
-    public String getIdGenero(@RequestParam String genre){
-        return "genre: " + genre;
-    }*/
-
 
 
 }
+
+/*
+ * @GetMapping("/api/movies")
+ * 
+ * @ResponseBody public String getIdGenero(@RequestParam String genre){ return
+ * "genre: " + genre; }
+ */

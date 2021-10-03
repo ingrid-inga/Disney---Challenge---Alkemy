@@ -81,6 +81,10 @@ public class PeliculaService {
 	return this.traerPeliculas().stream().sorted(Comparator.comparing(Pelicula::getFechaDeCreacion)).collect(Collectors.toList());
     }
 
+    public Pelicula findByTitulo(String titulo) {
+        return repository.findByTitulo(titulo);
+    }
+
 	/*public List<Pelicula> findByName(String name) {
         return repository.findByTitulo(titulo);
 	}*/
