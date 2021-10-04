@@ -15,8 +15,8 @@ public class GeneroController {
     @Autowired
     GeneroService service;
 
-    @PostMapping("/genres")
-    public ResponseEntity<?> crearGenero(@RequestBody Genero genero) {
+    @PostMapping("api/genres")
+    public ResponseEntity<GenericResponse> crearGenero(@RequestBody Genero genero) {
         GenericResponse r = new GenericResponse();
 
         if (service.crearGenero(genero)) {

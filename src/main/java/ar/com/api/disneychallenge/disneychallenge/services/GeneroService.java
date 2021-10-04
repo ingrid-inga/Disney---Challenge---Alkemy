@@ -24,7 +24,7 @@ public class GeneroService {
 
     private boolean existe(String nombre) {
         Genero genero = repository.findByNombre(nombre);
-        return nombre != null;
+        return genero != null;
     }
 
     public List<Genero> traerGeneros() {

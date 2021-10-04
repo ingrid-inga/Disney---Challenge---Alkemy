@@ -17,8 +17,7 @@ public class Genero {
 
     private String nombre;
 
-    @Column(name = "imageng")
-    private String imagenG;
+    private String imageng;
 
     @JsonIgnore
     @OneToMany(mappedBy = "genero", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -48,12 +47,12 @@ public class Genero {
         this.nombre = nombre;
     }
 
-    public String getImagenG() {
-        return imagenG;
+    public String getImageng() {
+        return imageng;
     }
 
-    public void setImagenG(String imagenG) {
-        this.imagenG = imagenG;
+    public void setImageng(String imageng) {
+        this.imageng = imageng;
     }
 
     public void agregarPelicula(Pelicula pelicula) {
